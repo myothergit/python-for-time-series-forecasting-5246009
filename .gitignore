@@ -17,3 +17,5 @@ archive
 *.csv
 *.parquet
 *.xlsx
+
+docs
