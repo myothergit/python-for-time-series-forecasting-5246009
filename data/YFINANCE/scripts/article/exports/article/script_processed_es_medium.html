@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Procesando reportes financieros anuales sobre múltiples activos en Python</title>
+</head>
+<body>
+    <h2>Te explicamos cómo procesar múltiples activos financieros para agregarlos a un reporte que destaque el rendimiento anual de cada activo.</h2>
+    <p>Si comparamos el rendimiento de activos financieros como Bitcoin,
+ETFs y acciones, ¿cuál fue el activo con mayor rentabilidad, desde el
+año 2010?</p>
+<figure>
+<img src="https://images.datons.ai/C-BILELLO-1/D_asset_performance.png" alt="Comparación de rendimiento anual de diferentes activos financieros desde 2010">
+<figcaption>
+F1. Rendimiento anual de activos financieros desde 2010
+</figcaption>
+</figure>
+<p>En este tutorial, te explicamos cómo descargar, procesar y reportar
+el rendimiento de activos financieros usando Python.</p>
+<p>El reporte está inspirado los <a
+href="https://twitter.com/charliebilello/status/1643699214914822144">análisis
+de Charlie Bilello</a>.</p>
+<blockquote>
+<p>Aprende a programar más casos prácticos en <a
+href="https://datons.ai">datons</a></p>
+</blockquote>
+<h1 id="data">Data</h1>
+<p>Definimos la lista de tickers de los activos a analizar.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>tickers <span class="op">=</span> [<span class="st">&#39;BTC-USD&#39;</span>, <span class="st">&#39;QQQ&#39;</span>, <span class="st">&#39;IWF&#39;</span>, <span class="st">&#39;SPY&#39;</span>, ...]</span></code></pre></div>
+<p>Descargamos movimientos diarios de precios históricos usando la
+librería <code>yfinance</code>, que descarga datos de Yahoo Finance.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> yfinance <span class="im">as</span> yf</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> yf.download(tickers)</span></code></pre></div>
+<figure>
+<img src="https://images.datons.ai/C-BILELLO-1/D_hist.png" alt="Gráfico de precios históricos diarios para Bitcoin, ETFs y acciones">
+<figcaption>
+F2. Precios históricos diarios de activos financieros
+</figcaption>
+</figure>
+<h1 id="preguntas">Preguntas</h1>
+<ol type="1">
+<li>¿Cómo descargar datos históricos de precios de múltiples activos
+financieros?</li>
+<li>¿Cómo calcular el retorno acumulado anual de cada activo?</li>
+<li>¿Por qué es necesario agrupar los datos para tener cálculos
+acumulados?</li>
+<li>¿Cómo seleccionar el último día de retorno acumulado en cada
+año?</li>
+<li>¿Cómo identificar los valores máximos y mínimos de retorno en cada
+año?</li>
+<li>¿Cómo calcular el porcentaje de retornos positivos para cada
+activo?</li>
+</ol>
+<h1 id="metodología">Metodología</h1>
+<h2 id="retorno-acumulado-anual">Retorno acumulado anual</h2>
+<p>Seleccionamos los precios de cierre ajustados <code>Adj Close</code>
+desde el año 2010 y calculamos el retorno acumulado anual, seleccionando
+el último día hábil de cada año.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(df</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a> .loc[<span class="st">&#39;2010&#39;</span>:, <span class="st">&#39;Adj Close&#39;</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> .groupby(df.index.year).pct_change().add(<span class="dv">1</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a> .groupby(df.index.year).cumprod().sub(<span class="dv">1</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a> .resample(<span class="st">&#39;YE&#39;</span>).last().T</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><code>BTC-USD</code> (Bitcoin) presenta valores perdidos en los
+primeros años debido a su regulación y adopción (ver historia completa
+en <a
+href="https://en.wikipedia.org/wiki/History_of_bitcoin#2014">Wikipedia</a>).</p>
+<figure>
+<img src="https://images.datons.ai/C-BILELLO-1/D_etf_returns.png" alt="Retorno acumulado anual de ETFs mostrando valores perdidos en los primeros años para Bitcoin">
+<figcaption>
+F3. Retorno acumulado anual de ETFs
+</figcaption>
+</figure>
+<blockquote>
+<p>Ayúdame a seguir creando más tutoriales clicando en el <strong>botón
+del aplauso. ¡Gracias!</strong> 👏</p>
+</blockquote>
+<h2 id="resumen-por-columnas">Resumen por columnas</h2>
+<p>¿Cómo se comportaron los activos durante todos los años?</p>
+<p>Calculamos el retorno promedio anual y el retorno acumulado anual
+para cada activo.</p>
+<blockquote>
+<p>Para más detalles sobre el cálculo de los retornos, visita <a
+href="https://datons.ai/preprocess-and-analyze-stock-returns-with-python/">este
+tutorial</a>.</p>
+</blockquote>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>t_avg <span class="op">=</span> df.mean(axis<span class="op">=</span><span class="dv">1</span>).mul(<span class="dv">100</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>t_cum <span class="op">=</span> df.add(<span class="dv">1</span>).cumprod(axis<span class="op">=</span><span class="dv">1</span>).sub(<span class="dv">1</span>).mul(<span class="dv">100</span>).iloc[:,[<span class="op">-</span><span class="dv">1</span>]]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({<span class="st">&#39;AVG&#39;</span>: t_avg, <span class="st">&#39;CAGR&#39;</span>: t_cum})</span></code></pre></div>
+<figure>
+<img src="https://images.datons.ai/C-BILELLO-1/D_etf_summary.png" alt="Resumen de retorno promedio anual y acumulado de diferentes activos financieros">
+<figcaption>
+F4. Resumen de retorno de activos financieros
+</figcaption>
+</figure>
+<h2 id="resumen-por-filas">Resumen por filas</h2>
+<p>¿Cuáles fueron los valores máximos y mínimos en cada año? ¿Cuál fue
+el porcentaje de retornos positivos?</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>positive_pct <span class="op">=</span> <span class="kw">lambda</span> x: (x <span class="op">&gt;</span> <span class="dv">0</span>).mean() <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>dfr.agg([<span class="st">&#39;max&#39;</span>, <span class="st">&#39;min&#39;</span>, positive_pct])</span></code></pre></div>
+<p>Todos los activos presentan retornos positivos acumulados al final
+del período, siendo <code>BTC-USD</code> el activo con mayor
+rentabilidad.</p>
+<figure>
+<img src="https://images.datons.ai/C-BILELLO-1/D_etf_summary_rows.png" alt="Valores máximos, mínimos y porcentaje de retornos positivos de activos financieros por año">
+<figcaption>
+F5. Resumen anual de rendimiento de activos financieros
+</figcaption>
+</figure>
+<h2 id="combinar-y-aplicar-estilo">Combinar y aplicar estilo</h2>
+<p>Finalmente, combinamos todas las tablas y aplicamos un estilo para
+resaltar los valores máximos y mínimos.</p>
+<blockquote>
+<p>En <a
+href="https://datons.ai/style-pandas-pivot-table-to-create-heat-matrix/">este
+tutorial</a> se explica cómo aplicar estilos a tablas de pandas.</p>
+</blockquote>
+<figure>
+<img src="https://images.datons.ai/C-BILELLO-1/D_asset_performance.png" alt="Comparación de rendimiento anual de diferentes activos financieros desde 2010">
+<figcaption>
+F1. Rendimiento anual de activos financieros desde 2010
+</figcaption>
+</figure>
+<p>¿Por qué durante el año 2022 casi todos los activos presentan
+retornos negativos?</p>
+<p>Te leo en los comentarios.</p>
+<h1 id="conclusiones">Conclusiones</h1>
+<ol type="1">
+<li><strong>Descargar datos históricos:</strong>
+<code>yf.download(tickers)</code> para obtener datos de múltiples
+activos financieros de Yahoo Finance.</li>
+<li><strong>Calcular el retorno acumulado anual:</strong>
+<code>.pct_change().add(1).cumprod().sub(1)</code> para determinar el
+rendimiento de un activo a lo largo del tiempo.</li>
+<li><strong>Agrupar datos para cálculos acumulados:</strong>
+<code>groupby.cumprod</code> para resetear los cálculos acumulados al
+inicio de cada año.</li>
+<li><strong>Seleccionar el último día de retorno acumulado:</strong>
+<code>.resample('Y').last()</code> para obtener el valor final de cada
+año, útil para análisis anual.</li>
+<li><strong>Identificar valores máximos y mínimos:</strong>
+<code>.agg(['max', 'min'])</code> para encontrar los extremos en el
+rendimiento anual de los activos.</li>
+<li><strong>Calcular el porcentaje de retornos positivos:</strong>
+<code>lambda x: (x &gt; 0).mean() * 100</code> para evaluar la
+frecuencia de ganancias de un activo.</li>
+</ol>
+<hr />
+<blockquote>
+<p>Además de este tutorial, puedes aprender más con nuestros cursos en
+directo.</p>
+<p>Te enseñaré las mejores prácticas para programar más en menos líneas
+y resolver tus dudas, todo mientras trabajamos en casos prácticos sobre
+datos que te interesen.</p>
+<p>Para más información, visita <a
+href="https://datons.ai/"><strong>datons</strong></a></p>
+</blockquote>
+
+</body>
+</html>

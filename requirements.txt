@@ -2,3 +2,14 @@ requests>=2.28
 pandas
 statsmodels
 matplotlib
+plotly
+yfinance
+numpy
+seaborn
+scikit-learn
+nbformat
+ipykernel
+openpyxl
+fastparquet
+pyarrow
+jinja2

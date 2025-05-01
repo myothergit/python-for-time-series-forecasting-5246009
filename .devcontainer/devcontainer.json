@@ -38,8 +38,22 @@
 			"extensions": [
 				"linkedinlearning.linkedinlearning-vscode-theme",
 				"ms-python.python",
-				"ms-python.vscode-pylance"
+				"ms-python.vscode-pylance",
 				// Additional Extensions Here
+				"ms-toolsai.jupyter",
+				"ms-python.python",
+				"bierner.docs-view",
+				"christian-kohler.path-intellisense",
+				"ms-python.vscode-pylance",
+				"ms-toolsai.vscode-jupyter-slideshow",
+				"ms-toolsai.jupyter-renderers",
+				"ms-toolsai.jupyter-keymap",
+				"ms-toolsai.vscode-jupyter-cell-tags",
+				"VisualStudioExptTeam.vscodeintellicode",
+				"GitHub.github-vscode-theme",
+				"ms-azuretools.vscode-docker",
+				"DavidAnson.vscode-markdownlint",
+				"vscode-icons-team.vscode-icons"
 			]
 		}
 	},
