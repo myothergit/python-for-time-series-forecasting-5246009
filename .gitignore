@@ -19,3 +19,6 @@ archive
 *.xlsx
 
 docs
+
+.vscode
+.env

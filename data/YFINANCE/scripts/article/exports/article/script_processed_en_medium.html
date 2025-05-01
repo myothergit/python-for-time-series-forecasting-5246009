@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Processing annual financial reports on multiple assets in Python</title>
+</head>
+<body>
+    <h2>We explain how to process multiple financial assets and include them in a report highlighting each asset's annual performance.</h2>
+    <p>When comparing the performance of financial assets like Bitcoin,
+ETFs, and stocks, which was the most profitable asset since 2010?</p>
+<figure>
+<img src="https://images.datons.ai/C-BILELLO-1/D_asset_performance.png" alt="Annual performance comparison of various financial assets since 2010">
+<figcaption>
+F1. Annual performance of financial assets since 2010
+</figcaption>
+</figure>
+<p>In this tutorial, we explain how to download, process, and report on
+the performance of financial assets using Python.</p>
+<p>The report is inspired by <a
+href="https://twitter.com/charliebilello/status/1643699214914822144">Charlie
+Bilello’s analyses</a>.</p>
+<blockquote>
+<p>Learn how to program more practical cases with data at <a
+href="https://datons.ai">datons</a></p>
+</blockquote>
+<h1 id="data">Data</h1>
+<p>We define the list of tickers for the assets to analyze.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>tickers <span class="op">=</span> [<span class="st">&#39;BTC-USD&#39;</span>, <span class="st">&#39;QQQ&#39;</span>, <span class="st">&#39;IWF&#39;</span>, <span class="st">&#39;SPY&#39;</span>, ...]</span></code></pre></div>
+<p>We download daily historical price movements using the
+<code>yfinance</code> library, which downloads data from Yahoo
+Finance.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> yfinance <span class="im">as</span> yf</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> yf.download(tickers)</span></code></pre></div>
+<figure>
+<img src="https://images.datons.ai/C-BILELLO-1/D_hist.png" alt="Daily historical price chart for Bitcoin, ETFs, and stocks">
+<figcaption>
+F2. Daily historical prices of financial assets
+</figcaption>
+</figure>
+<h1 id="questions">Questions</h1>
+<ol type="1">
+<li>How to download historical price data for multiple financial
+assets?</li>
+<li>How to calculate the annual cumulative return of each asset?</li>
+<li>Why is it necessary to group data for cumulative calculations?</li>
+<li>How to select the last day of cumulative return in each year?</li>
+<li>How to identify the maximum and minimum return values in each
+year?</li>
+<li>How to calculate the percentage of positive returns for each
+asset?</li>
+</ol>
+<h1 id="methodology">Methodology</h1>
+<h2 id="annual-cumulative-return">Annual cumulative return</h2>
+<p>We select the adjusted closing prices <code>Adj Close</code> from
+2010 and calculate the annual cumulative return, choosing the last
+business day of each year.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(df</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a> .loc[<span class="st">&#39;2010&#39;</span>:, <span class="st">&#39;Adj Close&#39;</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> .groupby(df.index.year).pct_change().add(<span class="dv">1</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a> .groupby(df.index.year).cumprod().sub(<span class="dv">1</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a> .resample(<span class="st">&#39;YE&#39;</span>).last().T</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><code>BTC-USD</code> (Bitcoin) shows missing values in the early
+years due to its regulation and adoption (see the full story on <a
+href="https://en.wikipedia.org/wiki/History_of_bitcoin#2014">Wikipedia</a>).</p>
+<figure>
+<img src="https://images.datons.ai/C-BILELLO-1/D_etf_returns.png" alt="Annual cumulative returns for ETFs, showing missing early years for Bitcoin">
+<figcaption>
+F3. Annual cumulative returns of ETFs
+</figcaption>
+</figure>
+<h2 id="column-summary">Column summary</h2>
+<p>How did the assets perform over the years?</p>
+<p>We calculate the average annual return and the annual cumulative
+return for each asset.</p>
+<blockquote>
+<p>For more details on the calculation of returns, visit <a
+href="https://datons.ai/preprocess-and-analyze-stock-returns-with-python/">this
+tutorial</a>.</p>
+</blockquote>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>t_avg <span class="op">=</span> df.mean(axis<span class="op">=</span><span class="dv">1</span>).mul(<span class="dv">100</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>t_cum <span class="op">=</span> df.add(<span class="dv">1</span>).cumprod(axis<span class="op">=</span><span class="dv">1</span>).sub(<span class="dv">1</span>).mul(<span class="dv">100</span>).iloc[:,[<span class="op">-</span><span class="dv">1</span>]]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({<span class="st">&#39;AVG&#39;</span>: t_avg, <span class="st">&#39;CAGR&#39;</span>: t_cum})</span></code></pre></div>
+<figure>
+<img src="https://images.datons.ai/C-BILELLO-1/D_etf_summary.png" alt="Summary of average annual return and cumulative return for various financial assets">
+<figcaption>
+F4. Return summary of financial assets
+</figcaption>
+</figure>
+<h2 id="row-summary">Row summary</h2>
+<p>What were the maximum and minimum values each year? What was the
+percentage of positive returns?</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>positive_pct <span class="op">=</span> <span class="kw">lambda</span> x: (x <span class="op">&gt;</span> <span class="dv">0</span>).mean() <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>dfr.agg([<span class="st">&#39;max&#39;</span>, <span class="st">&#39;min&#39;</span>, positive_pct])</span></code></pre></div>
+<p>All assets showed positive cumulative returns at the end of the
+period, with <code>BTC-USD</code> being the most profitable asset.</p>
+<figure>
+<img src="https://images.datons.ai/C-BILELLO-1/D_etf_summary_rows.png" alt="Annual performance summary showing maximum, minimum values, and percentage of positive returns for financial assets">
+<figcaption>
+F5. Annual performance summary of financial assets
+</figcaption>
+</figure>
+<h2 id="combining-and-styling">Combining and styling</h2>
+<p>Finally, we combine all tables and apply styling to highlight maximum
+and minimum values.</p>
+<blockquote>
+<p>This tutorial explains how to apply styles to pandas tables to create
+a heat matrix <a
+href="https://datons.ai/style-pandas-pivot-table-to-create-heat-matrix/">this
+tutorial</a>.</p>
+</blockquote>
+<figure>
+<img src="https://images.datons.ai/C-BILELLO-1/D_asset_performance.png" alt="Annual performance comparison of various financial assets since 2010">
+<figcaption>
+F1. Annual performance of financial assets since 2010
+</figcaption>
+</figure>
+<p>Why did almost all assets show negative returns in 2022?</p>
+<p>Looking forward to your comments.</p>
+<h1 id="conclusions">Conclusions</h1>
+<ol type="1">
+<li><strong>Downloading historical data:</strong>
+<code>yf.download(tickers)</code> to get data for multiple financial
+assets from Yahoo Finance.</li>
+<li><strong>Calculating annual cumulative return:</strong>
+<code>.pct_change().add(1).cumprod().sub(1)</code> to determine an
+asset’s performance over time.</li>
+<li><strong>Grouping data for cumulative calculations:</strong>
+<code>groupby.cumprod</code> to reset cumulative calculations at the
+start of each year.</li>
+<li><strong>Selecting the last day of cumulative return:</strong>
+<code>.resample('Y').last()</code> to find the final value of each year,
+useful for annual analysis.</li>
+<li><strong>Identifying maximum and minimum values:</strong>
+<code>.agg(['max', 'min'])</code> to discover the extremes in annual
+asset performance.</li>
+<li><strong>Calculating the percentage of positive returns:</strong>
+<code>lambda x: (x &gt; 0).mean() * 100</code> to evaluate the frequency
+of an asset’s gains.</li>
+</ol>
+<hr />
+<blockquote>
+<p>In addition to this tutorial, you can learn more with our live
+courses.</p>
+<p>I’ll teach you the best practices for writing more efficient code in
+fewer lines and address your questions, all while working on practical
+cases with data that interests you.</p>
+<p>For more info, visit <a
+href="https://datons.ai/"><strong>datons</strong></a></p>
+</blockquote>
+
+</body>
+</html>
