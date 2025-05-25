@@ -25,3 +25,5 @@ docs
 
 *.txt
 .sketch/
+
+data/**/scripts/
