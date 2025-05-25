@@ -26,4 +26,4 @@ docs
 *.txt
 .sketch/
 
-data/**/scripts/
+data/**/scripts/notebooks/.heavy/
