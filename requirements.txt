@@ -13,3 +13,5 @@ openpyxl
 fastparquet
 pyarrow
 jinja2
+prophet
+ipywidgets
