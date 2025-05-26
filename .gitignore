@@ -29,3 +29,5 @@ data/**/scripts/notebooks/.heavy/
 .heavy/
 
 notebooks_sketch/
+
+!modules/utils.py
