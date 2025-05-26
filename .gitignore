@@ -10,7 +10,6 @@ __pycache__
 .DS_Store
 archive*
 utils.py
-1*.ipynb
 .solutions
 .vscode
 archive
@@ -28,3 +27,5 @@ docs
 
 data/**/scripts/notebooks/.heavy/
 .heavy/
+
+notebooks_sketch/
