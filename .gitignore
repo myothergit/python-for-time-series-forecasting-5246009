@@ -27,3 +27,4 @@ docs
 .sketch/
 
 data/**/scripts/notebooks/.heavy/
+.heavy/
