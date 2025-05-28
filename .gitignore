@@ -31,3 +31,4 @@ data/**/scripts/notebooks/.heavy/
 notebooks_sketch/
 
 !modules/utils.py
+notebooks/**/E_*.ipynb

@@ -62,5 +62,8 @@
 	"onCreateCommand": "echo PS1='\"$ \"' >> ~/.bashrc",
 	// Pull all branches
 	"postAttachCommand": "git pull --all",
-	"postCreateCommand": "sh .devcontainer/startup.sh"
+	"postCreateCommand": "sh .devcontainer/startup.sh",
+	"containerEnv": {
+		"PYTHONPATH": "/workspaces/python-for-time-series-forecasting-5246009"
+	}
 }
