@@ -144,6 +144,10 @@ def get_model_forecast(
 ):
     df = data_frame.copy()
     series = df[column].dropna()
+
+    if forecast_exp:
+        series = np.log(series)
+
     p, d, q = order
 
     if seasonal_order is None:
@@ -451,12 +455,13 @@ class TimeSeriesForecaster:
         model = ExponentialSmoothing(train, **model_params).fit()
         forecast_train = model.predict(start=train.index[0], end=train.index[-1])
         forecast_test = model.predict(start=test.index[0], end=test.index[-1])
+
         if log_transform:
             forecast_train = np.exp(forecast_train)
             forecast_test = np.exp(forecast_test)
         return forecast_train, forecast_test
 
-    def prophet(self, model_params=None, forecast_exp=False, log_transform=False):
+    def prophet(self, model_params=None, log_transform=False):
         """
         Prophet forecast. If log_transform is True, log-transform the data before fitting and exponentiate the forecast.
         """
@@ -466,16 +471,23 @@ class TimeSeriesForecaster:
             "daily_seasonality": False,
             "seasonality_mode": "multiplicative",
         }
+
         train = np.log(self.train) if log_transform else self.train
         test = np.log(self.test) if log_transform else self.test
-        df_train = pd.DataFrame({"ds": train.index, "y": train})
+
+        df_train = pd.DataFrame({"ds": train.index, "y": train.values})
+
         model = Prophet(**model_params)
         model.fit(df_train)
-        future = model.make_future_dataframe(periods=len(self.test), freq=self.freq)
+
+        test_size = len(test)
+        future = model.make_future_dataframe(periods=test_size, freq=self.freq)
         forecast = model.predict(future).set_index("ds").asfreq(self.freq)
-        forecast_train = forecast.loc[train.index]["yhat"]
-        forecast_test = forecast.loc[test.index]["yhat"]
-        if log_transform or forecast_exp:
+
+        forecast_train = forecast.iloc[:-test_size]["yhat"]
+        forecast_test = forecast.iloc[-test_size:]["yhat"]
+
+        if log_transform:
             forecast_train = np.exp(forecast_train)
             forecast_test = np.exp(forecast_test)
         return forecast_train, forecast_test
