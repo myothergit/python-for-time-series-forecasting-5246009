@@ -1,36 +1,50 @@
-# COURSENAME
-This is the repository for the LinkedIn Learning course `course-name`. The full course is available from [LinkedIn Learning][lil-course-url].
+# Python for Time Series Forecasting
 
-![course-name-alt-text][lil-thumbnail-url] 
+Welcome to the repository for the LinkedIn Learning course **Python for Time Series Forecasting** by Jesus Lopez. The full course is available on [LinkedIn Learning](https://www.linkedin.com/learning/).
 
-_See the readme file in the main branch for updated instructions and information._
-## Instructions
-This repository has branches for each of the videos in the course. You can use the branch pop up menu in github to switch to a specific branch and take a look at the course at that stage, or you can add `/tree/BRANCH_NAME` to the URL to go to the branch you want to access.
+![Python for Time Series Forecasting](https://media.licdn.com/dms/image/v2/D4E0DAQG0eDHsyOSqTA/learning-public-crop_675_1200/B4EZVdqqdwHUAY-/0/1741033220778?e=2147483647&v=beta&t=FxUDo6FA8W8CiFROwqfZKL_mzQhYx9loYLfjN-LNjgA)
 
-## Branches
-The branches are structured to correspond to the videos in the course. The naming convention is `CHAPTER#_MOVIE#`. As an example, the branch named `02_03` corresponds to the second chapter and the third video in that chapter. 
-Some branches will have a beginning and an end state. These are marked with the letters `b` for "beginning" and `e` for "end". The `b` branch contains the code as it is at the beginning of the movie. The `e` branch contains the code as it is at the end of the movie. The `main` branch holds the final state of the code when in the course.
+## Course Overview
+Many business forecasts miss the mark, wasting millions through over- or under-planning. Without the right tools and a mental framework for understanding time series, predictions can easily lead to costly mistakes. In this course, you'll master forecasting with step-by-step guidance in Python, learning theory exactly when you need it so you can put it into practice.
 
-When switching from one exercise files branch to the next after making changes to the files, you may get a message like this:
+You'll work with real datasets from the US Energy Administration and Federal Reserve, learning to:
+- Load, pre-process, and visualize time series data
+- Build and validate ARIMA, SARIMA, exponential smoothing, and Prophet models
+- Use train/test split and walk-forward validation to trust your forecasts and plan for the future
 
-    error: Your local changes to the following files would be overwritten by checkout:        [files]
-    Please commit your changes or stash them before you switch branches.
-    Aborting
+Ready to forecast like a pro? Join Jesús López and turn raw data into future-proof forecasts.
 
-To resolve this issue:
-	
-    Add changes to git using this command: git add .
-	Commit changes using this command: git commit -m "some message"
+## Getting Started
 
-## Installing
-1. To use these exercise files, you must have the following installed:
-	- [list of requirements for course]
-2. Clone this repository into your local machine using the terminal (Mac), CMD (Windows), or a GUI tool like SourceTree.
-3. [Course-specific instructions]
+### Using Codespaces (Recommended)
+This course is designed to be run in a GitHub Codespace—a virtual computer with all required Python packages pre-installed. To get started:
+1. Click the **Code** button in GitHub and select **Create codespace on main**.
+2. Wait for the Codespace to finish setting up. You can monitor progress by clicking the bell icon in the Codespace interface.
+3. Once setup is complete, activate the **VS Code Icons** extension for a better folder view (optional).
 
+### Repository Structure
+All course notebooks are in the `notebooks` folder, organized into three main blocks:
+- **1_Foundation**: Loading, pre-processing, and decomposition of time series data
+- **2_Modelling**: Building models (ARIMA, SARIMA, smoothing, Prophet), understanding stationarity, and evaluating models
+- **3_Validation**: Simulating real-world scenarios with rolling window validation
 
-[0]: # (Replace these placeholder URLs with actual course URLs)
+Inside each folder, you'll find Jupyter notebooks with code ready to run. To execute code cells, select a Python environment (e.g., `global env`) when prompted, then use `Shift+Enter` to run each cell.
 
-[lil-course-url]: https://www.linkedin.com/learning/
-[lil-thumbnail-url]: https://media.licdn.com/dms/image/v2/D4E0DAQG0eDHsyOSqTA/learning-public-crop_675_1200/B4EZVdqqdwHUAY-/0/1741033220778?e=2147483647&v=beta&t=FxUDo6FA8W8CiFROwqfZKL_mzQhYx9loYLfjN-LNjgA
+### Assignments
+Each block contains an assignment notebook. These follow a template approach: substitute the UPPERCASE variables with your chosen data and follow the steps to validate your results and forecast into the future.
+
+## Requirements
+All requirements are pre-installed in Codespaces. If running locally, install dependencies from `requirements.txt`.
+
+## Cloning the Repository
+To work locally:
+1. Clone this repository:
+    git clone <repo-url>
+2. Install requirements:
+    pip install -r requirements.txt
+3. Open the `notebooks` folder and start exploring!
+
+---
+
+Happy forecasting!
 
