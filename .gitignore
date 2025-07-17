@@ -17,6 +17,17 @@ archive
 *.parquet
 *.xlsx
 
+# Exception: Allow specific data files needed by notebooks
+!data/EIA/demand_cal_historical_datetime-split.csv
+!data/EIA/fuel_type_data_california.parquet
+!data/FRED/CORESTICKM159SFRBATL.csv
+!data/FRED/CORESTICKM159SFRBATL.xlsx
+!data/FRED/FRED_joined.parquet
+!data/UCIrvine/ElectricityLoadDiagrams20112014.parquet
+!data/fred/HOUSTNSA.csv
+!data/statsmodels/AirPassengers.parquet
+!data/statsmodels/AirPassengers_log.parquet
+
 docs
 
 .vscode
@@ -32,3 +43,5 @@ notebooks_sketch/
 
 !modules/utils.py
 notebooks/**/E_*.ipynb
+find_data_paths.py
+analyze_data_files.py

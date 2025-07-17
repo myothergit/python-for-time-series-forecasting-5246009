@@ -1,1 +1,1 @@
-*.csv filter=lfs diff=lfs merge=lfs -text
+# No LFS needed - all data files are under 3MB
