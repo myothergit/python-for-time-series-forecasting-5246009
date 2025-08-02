@@ -15,7 +15,7 @@
     "emmet.triggerExpansionOnTab": true,
     "files.autoSave": "onFocusChange",
     "terminal.integrated.fontSize": 14,
-    "workbench.colorTheme": "Dracula Pro (Van Helsing)",
+    "workbench.colorTheme": "Visual Studio Dark",
     "workbench.fontAliasing": "antialiased",
     "workbench.statusBar.visible": true,
 }
