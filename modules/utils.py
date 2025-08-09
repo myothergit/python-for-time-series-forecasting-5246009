@@ -8,7 +8,7 @@ def configure_plotly_template(showlegend=False, width=1000, height=500):
     pio.templates.default = "plotly_dark"
     pd.options.plotting.backend = "plotly"
     pio.templates["plotly_dark"].layout.update(
-        width=width, height=height, showlegend=showlegend, autosize=False
+        width=width, height=height, showlegend=showlegend, autosize=False, hovermode='x unified'
     )
 
 
