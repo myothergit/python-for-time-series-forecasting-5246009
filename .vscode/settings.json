@@ -13,7 +13,7 @@
     "editor.tabSize": 4,
     "editor.useTabStops": true,
     "emmet.triggerExpansionOnTab": true,
-    "files.autoSave": "onFocusChange",
+    "files.autoSave": "afterDelay",
     "terminal.integrated.fontSize": 14,
     "workbench.colorTheme": "Visual Studio Dark",
     "workbench.fontAliasing": "antialiased",
